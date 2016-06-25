@@ -71,6 +71,33 @@ puts ""
   # Count and print the number of the brand's toys we stock
   # Calculate and print the average price of the brand's toys
   # Calculate and print the total revenue of all the brand's toy sales combined
+print "\n\n"
+
+#store the JSON array sorted by brand into another array
+arr = products_hash["items"].sort_by{|i| i["brand"]}
+
+brand = arr[0]["brand"]
+previousBrand = arr[0]["brand"]
+totalStock = 0
+averagePrice = 0
+puts brand
+arr.each do |i|
+  brand = i["brand"]
+  #Print the name of the brand
+
+  #Counting then printing the amount of the brand's toys in stock
+  totalStock = i["stock"]
+  if previousBrand.eql?(brand)
+    totalStock += i["stock"]
+    puts totalStock
+  else
+    print brand
+    puts totalStock
+    totalStock = i["stock"]
+    print ' '
+  end
+end
+
 
 
 =begin
