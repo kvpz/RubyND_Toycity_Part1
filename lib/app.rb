@@ -15,6 +15,7 @@ puts "| |                                       "
 puts "|_|                                       "
 
 puts Time.new
+print "\n"
 
 # For each product in the data set:
   # Print the name of the toy
@@ -25,10 +26,36 @@ puts Time.new
   # Calculate and print the average discount (% or $) based off the average sales price
 
 products_hash["items"].each do |toy|
+  #print name of toy
   puts toy["title"]
-  puts '$'+toy["full-price"]
+
+  #toy's retail price
+  puts 'retail price: $'+toy["full-price"]
+
+  # calculate amount of purchases for a toy
   puts toy["purchases"].length
-  puts toy[""]
+
+  #summing up all purchases to then display total sales
+  sales = 0
+  toy["purchases"].each do |purch|
+    sales += purch["price"]
+  end
+  print "total sales: $"
+  puts sales
+
+  #Calculating averagePrice and displaying it
+  print "Average price toys sold for $"
+  averagePrice = sales/toy["purchases"].length
+  puts averagePrice
+
+  # I'm not sure how the total discount is wanted exactly, but...
+  # I'm going to subtract the averagePrice by retail then divide
+  #
+  #
+  totalDiscounts = (1 - averagePrice/toy["full-price"].to_i)*100
+  print "The average discount(percentage): %"
+  puts totalDiscounts
+  puts
 end
 
 puts " _                         _     "
@@ -44,3 +71,15 @@ puts ""
   # Count and print the number of the brand's toys we stock
   # Calculate and print the average price of the brand's toys
   # Calculate and print the total revenue of all the brand's toy sales combined
+
+
+=begin
+toy["purchases"].each do |purch|
+  currentSalePrice = purch["price"]
+  if currentSalePrice < averagePrice
+    totalDiscounts +=currentSalePrice
+  else
+    totalDiscounts -= currentSalePrice
+  end
+end
+=end
