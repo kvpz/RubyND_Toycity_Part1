@@ -14,6 +14,7 @@ puts "| .__/|_|  \\___/ \\__,_|\\__,_|\\___|\\__|___/"
 puts "| |                                       "
 puts "|_|                                       "
 
+puts Time.new
 
 # For each product in the data set:
   # Print the name of the toy
@@ -23,6 +24,12 @@ puts "|_|                                       "
   # Calculate and print the average price the toy sold for
   # Calculate and print the average discount (% or $) based off the average sales price
 
+products_hash["items"].each do |toy|
+  puts toy["title"]
+  puts '$'+toy["full-price"]
+  puts toy["purchases"].length
+  puts toy[""]
+end
 
 puts " _                         _     "
 puts "| |                       | |    "
