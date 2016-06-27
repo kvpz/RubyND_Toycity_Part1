@@ -27,35 +27,32 @@ print "\n"
 
 products_hash["items"].each do |toy|
   #print name of toy
-  puts toy["title"]
+  puts "___Toy name: #{toy["title"]}___"
 
   #toy's retail price
-  puts 'retail price: $'+toy["full-price"]
+  puts "Retail price: $#{toy["full-price"]}"
 
   # calculate amount of purchases for a toy
-  puts toy["purchases"].length
+  puts "Amount of purchases: #{toy["purchases"].length}"
 
   #summing up all purchases to then display total sales
   sales = 0
   toy["purchases"].each do |purch|
     sales += purch["price"]
   end
-  print "total sales: $"
-  puts sales
+  puts "Total sales: $#{sales}"
 
   #Calculating averagePrice and displaying it
-  print "Average price toys sold for $"
   averagePrice = sales/toy["purchases"].length
-  puts averagePrice
+  puts "Average price toys sold for $ #{averagePrice}"
 
   # I'm not sure how the total discount is wanted exactly, but...
   # I'm going to subtract the averagePrice by retail then divide
   #
   #
   totalDiscounts = (1 - averagePrice/toy["full-price"].to_i)*100
-  print "The average discount(percentage): %"
-  puts totalDiscounts
-  puts
+  puts "The average discount(percentage): %#{totalDiscounts.round(2)}"
+  puts ""
 end
 
 puts " _                         _     "
@@ -73,30 +70,45 @@ puts ""
   # Calculate and print the total revenue of all the brand's toy sales combined
 print "\n\n"
 
-#store the JSON array sorted by brand into another array
-arr = products_hash["items"].sort_by{|i| i["brand"]}
+#storing the JSON array sorted by brand into another array
+item_array = products_hash["items"].sort_by{|i| i["brand"]}
 
-brand = arr[0]["brand"]
-previousBrand = arr[0]["brand"]
-totalStock = 0
-averagePrice = 0
-puts brand
-arr.each do |i|
-  brand = i["brand"]
-  #Print the name of the brand
+itr = 1 #used with array 'brand' declared below
+brand = Array.new(1,item_array[0]["brand"]) #stores the names of brands; initialized with first brand
+itemStockByBrand = Hash.new(0) #{brand:stock}
+amtOfDistinctToys = Hash.new #[brand]++ Iff brand==current_brand
+brandToyPriceSum = Hash.new #[brand] = averagePrice = ALL_arr["full-price"]/amt_of_toys
+totalRevenue = Hash.new #[brand] += purchases["price"]
 
-  #Counting then printing the amount of the brand's toys in stock
-  totalStock = i["stock"]
-  if previousBrand.eql?(brand)
-    totalStock += i["stock"]
-    puts totalStock
-  else
-    print brand
-    puts totalStock
-    totalStock = i["stock"]
-    print ' '
+#Gathering information
+item_array.each do |item| #item is a Hash
+  currentBrand = item["brand"]
+  # store brand name in an array for later iterating through all brands,
+  # E.g. brand[0]="LEGO", brand[1]="Nano Blocks", etc
+  if !brand[itr-1].eql?(currentBrand)
+    brand[itr] = currentBrand
+    itr += 1
+  end
+
+  itemStockByBrand.merge!({currentBrand => item["stock"]}){|key,old,new| new + old}
+  amtOfDistinctToys.merge!(currentBrand => 1){|key, old, new| old + 1}
+  brandToyPriceSum.merge!(currentBrand => item["full-price"].to_f){|key,old,new| new+old}
+
+  #summing up each toy's price it purchased
+  item["purchases"].each do |purchase|
+    totalRevenue.merge!(currentBrand => purchase["price"]){|key,old,new| old + new}
   end
 end
+
+#Displaying information
+brand.each do |current|
+  puts "~~~ "+current+" ~~~"
+  puts "Current toys stocked: "+itemStockByBrand[current].to_s
+  puts "Average price of toys: $#{(brandToyPriceSum[current]/amtOfDistinctToys[current]).round(2)} (out of #{amtOfDistinctToys[current]} distinct toys)"
+  puts "Toy sales combined: $#{+totalRevenue[current].round(2)}"
+  print "\n"
+end
+
 
 
 
