@@ -50,7 +50,7 @@ products_hash["items"].each do |toy|
   # I'm going to subtract the averagePrice by retail then divide
   #
   #
-  totalDiscounts = (1 - averagePrice/toy["full-price"].to_i)*100
+  totalDiscounts = (1 - averagePrice/toy["full-price"].to_f)*100
   puts "The average discount(percentage): %#{totalDiscounts.round(2)}"
   puts ""
 end
