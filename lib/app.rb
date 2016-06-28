@@ -14,7 +14,8 @@ puts "| .__/|_|  \\___/ \\__,_|\\__,_|\\___|\\__|___/"
 puts "| |                                       "
 puts "|_|                                       "
 
-puts Time.new
+time = Time.new
+puts time
 print "\n"
 
 # For each product in the data set:
@@ -37,13 +38,11 @@ products_hash["items"].each do |toy|
 
   #summing up all purchases to then display total sales
   sales = 0
-  toy["purchases"].each do |purch|
-    sales += purch["price"]
-  end
+  sales =  toy["purchases"].inject{|sum, n|sum["price"] + n["price"]}
   puts "Total sales: $#{sales}"
 
   #Calculating averagePrice and displaying it
-  averagePrice = sales/toy["purchases"].length
+  averagePrice = (sales/toy["purchases"].length).to_f
   puts "Average price toys sold for $ #{averagePrice}"
 
   # I'm not sure how the total discount is wanted exactly, but...
