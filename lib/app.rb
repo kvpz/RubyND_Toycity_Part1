@@ -15,7 +15,7 @@ puts "| |                                       "
 puts "|_|                                       "
 
 time = Time.new
-puts time
+puts time.strftime("%B %d, %Y") #Month day, year
 print "\n"
 
 # For each product in the data set:
